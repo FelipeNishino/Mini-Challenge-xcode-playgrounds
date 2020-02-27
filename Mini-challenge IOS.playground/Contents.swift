@@ -10,12 +10,16 @@ let txtBodyColor : UIColor = .init(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
 let txtTitleColor : UIColor = .init(red: 0.3, green: 0, blue: 0.035, alpha: 1.0)
 let txtBodyBGColor : UIColor = .init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
 
+let bodyFont : UIFont = .init(fontName: "Helvetica", fontSize: 12)
+let bodyFontB : UIFont = .init(fontName: "Helvetica", fontSize: 12)
+bodyFontB.Weight = .bold
+
 let navBarBGImage = UIImage(named: "body_bg_small.png")
 
 let lblContents = [
 "Procedimentos de contenção especial: SCP-009 deve ser mantido em um quarto especialmente construído para imitar o de uma casa normal. Além da mobilia comum de um quarto, deve contar com um computador equipado com peças de última geração, sem admissão de falhas técnicas, como falta de energia ou componentes defeituosos. Manutenções devem ser realizadas mensalmente para a garantia do status do procedimento de contenção. O cômodo deve contar também com um pufe grande que deve ser mantido aproximadamente 65% cheio.",
 "É essencial que ao lado da cama haja um espelho no qual conste espaço para no mínimo duas tomadas e duas saídas USB no mínimo 3.1 e idealmente 3.2.",
-"Em caso de sinais de aflição ou simplesmente tédio iniciar umatransmissão da série de tv 'Bob Esponja Calça Quadrada', que parece terefeitos tranquilizantes/satisfatórios no SCP-Aoki.",
+"Em caso de sinais de aflição ou simplesmente tédio iniciar umatransmissão da série de tv 'Bob Esponja Calça Quadrada', que parece ter efeitos tranquilizantes no SCP-Aoki.",
 "SCP-Aoki é um jovem de ██ anos chamado Rodrigo Ryo Aoki que foi encontrado no campo 746-47-498, localizado em ███ ████████ ███████████, na cidade de Osasco, onde viveu sua vida inteira até o momento de atrair a atenção da SCP Foundation, possui uma personalidade tranquila e e amigável, frequentemente demonstrando ser prestativo.",
 "Durante sua vivência em liberdade estudou no Ensino Fundamental I na escola [DATA EXPUNGED], e posteriormente estudou o Ensino Fundamental II e Médio na escola [DATA EXPUNGED].",
 "Apresenta interesses comuns e inofensivos entre jovens em sua faixa etária, com um gosto especial para jogar videogames, ouvir música e assistir filmes.",
@@ -110,29 +114,83 @@ class HomepageViewController : UIViewController {
         contentView.backgroundColor = txtBodyBGColor
         
         for i in 0...(lblContents.count - 1) {
-            arrayLabels.append(ContentLabel())
-            
-            arrayLabels[i].text = lblContents[i]
-            
-            contentView.addSubview(arrayLabels[i])
-            
-            if i == 0 {
-                NSLayoutConstraint.activate([
-                    arrayLabels[i].topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-                    arrayLabels[i].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-                    arrayLabels[i].trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 360),
-                    arrayLabels[i].heightAnchor.constraint(equalToConstant: 200),
-                ])
+            let redo : boolean = false
+            while redo {
+                arrayLabels.append(ContentLabel())
+                
+                arrayLabels[i].text = lblContents[i]
+    
+                if arrayLabels[i].text.contains(":") {
+                    arrayLabels[i].text.split(separator: ":")
+                    arrayLabels[i].font = bodyFontB
+                    redo = true
+                }
+                else {
+                    redo = false
+                }
+                
+                contentView.addSubview(arrayLabels[i])
+                
+                if i == 0 {
+                    NSLayoutConstraint.activate([
+                        arrayLabels[i].topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+                        arrayLabels[i].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+                        arrayLabels[i].trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 360),
+                        arrayLabels[i].heightAnchor.constraint(equalToConstant: 200),
+                    ])
+                }
+                else {
+                    getLblAnchors(lbl0: arrayLabels[i-1], lbl: arrayLabels[i], view: contentView)
+                }
+                
+                arrayLabels[i].translatesAutoresizingMaskIntoConstraints = false
+                if redo {
+                    i += 1
+                }
             }
-            else {
-                getLblAnchors(lbl0: arrayLabels[i-1], lbl: arrayLabels[i], view: contentView)
-            }
-            
-            arrayLabels[i].translatesAutoresizingMaskIntoConstraints = false
             
 //            print("\(i): \(arrayLabels[i].text ?? "aa")\n")
         }
-        
+
+//         let i = 0
+//         while i != lblContents.count - 1 {
+//             let redo : boolean = false
+//             while redo {
+//                 arrayLabels.append(ContentLabel())
+                
+//                 arrayLabels[i].text = lblContents[i]
+    
+//                 if arrayLabels[i].contains(":") {
+//                     arrayLabels.split(separator: ":")
+//                     redo = true
+//                 }
+//                 else {
+//                     redo = false
+//                 }
+                
+//                 contentView.addSubview(arrayLabels[i])
+                
+//                 if i == 0 {
+//                     NSLayoutConstraint.activate([
+//                         arrayLabels[i].topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+//                         arrayLabels[i].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+//                         arrayLabels[i].trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 360),
+//                         arrayLabels[i].heightAnchor.constraint(equalToConstant: 200),
+//                     ])
+//                 }
+//                 else {
+//                     getLblAnchors(lbl0: arrayLabels[i-1], lbl: arrayLabels[i], view: contentView)
+//                 }
+                
+//                 arrayLabels[i].translatesAutoresizingMaskIntoConstraints = false
+//                 if redo {
+//                     i += 1
+//                 }
+//             }
+            
+// //            print("\(i): \(arrayLabels[i].text ?? "aa")\n")
+//         }
+
         button = CustomBtn()
         
         button.setTitle("Teste custom", for: .normal)
