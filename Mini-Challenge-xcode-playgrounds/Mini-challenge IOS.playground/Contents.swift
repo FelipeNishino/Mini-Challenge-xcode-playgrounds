@@ -87,13 +87,17 @@ class ContentLabel : UILabel {
 class HomepageViewController : UIViewController {
     
     var arrayLabels = [ContentLabel]()
-    
+    var decryptCount : Int = 0
+    var timerLimit : Int = 0
+    var i : Int = 0
     var button : CustomBtn!
     var img : UIImage!
+    let contentView = UIView()
+    
     
     func getLblAnchors(lbl0: ContentLabel, lbl: ContentLabel, lblHeight: CGFloat, view: UIView) {
         NSLayoutConstraint.activate([
-            //            lbl.topAnchor.constraint(equalTo: lbl0.bottomAnchor, constant: 20),
+//            lbl.topAnchor.constraint(equalTo: lbl0.bottomAnchor, constant: 20),
             lbl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             lbl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 360),
             lbl.heightAnchor.constraint(equalToConstant: lblHeight)
@@ -101,18 +105,29 @@ class HomepageViewController : UIViewController {
     }
     
     @objc func decryptText(sender: UIButton) {
-        print("aaa")
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { timer in
-            print("Teste timer")
+        print(view.frame.size.height)
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            self.decryptCount += 1
+            print(self.decryptCount)
+            if self.timerLimit < (self.arrayLabels.count - 1) {
+                if self.i != 0 {
+                    NSLayoutConstraint.activate([
+                        self.arrayLabels[self.i].topAnchor.constraint(equalTo: self.arrayLabels[self.i - 1].bottomAnchor, constant: CGFloat(self.decryptCount)),
+                    ])
+                }
+                self.i += 1
+                if self.decryptCount == 19 {
+                    timer.invalidate()
+                }
+            }
         }
+        i = 0
+        return
     }
     
     override func loadView() {
-        var charCount : Int
-        var lineCount : Int
+        var charCount, lineCount : Int
         var lblHeight : CGFloat
-        
-        let contentView = UIView()
         
         contentView.frame.size.height = 2080
         
@@ -133,12 +148,9 @@ class HomepageViewController : UIViewController {
             
             arrayLabels[i].text = lblContents[i]
             
-            
-            
             charCount = lblContents[i].count
             lineCount = ((charCount / 40) + 3) * Int(arrayLabels[i].font.lineHeight)
             lblHeight = CGFloat(lineCount)
-                    
             
             contentView.addSubview(arrayLabels[i])
             
@@ -165,13 +177,13 @@ class HomepageViewController : UIViewController {
         
         button.setTitle("Teste custom", for: .normal)
         
-        contentView.addSubview(button)
+        homepageScrollView.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.addTarget(self, action: #selector(decryptText), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: arrayLabels[arrayLabels.endIndex - 1].bottomAnchor, constant: 500),
+            button.topAnchor.constraint(equalTo: arrayLabels[arrayLabels.endIndex - 1].bottomAnchor, constant: 20),
             button.widthAnchor.constraint(equalToConstant: 200),
             button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
         ])
@@ -182,7 +194,6 @@ class HomepageViewController : UIViewController {
 
 let rootViewController = HomepageViewController()
 let navigationController = UINavigationController(rootViewController: rootViewController)
-print("\(navigationController.navigationBar.frame.height)")
 navigationController.navigationBar.setBackgroundImage(navBarBGImage, for: .top, barMetrics: .default)
 
 
