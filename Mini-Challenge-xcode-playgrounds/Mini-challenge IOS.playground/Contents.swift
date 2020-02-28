@@ -12,6 +12,10 @@ let txtBodyBGColor : UIColor = .init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0
 
 let customFont = UIFont(name: "ITC Bauhaus LT Demi", size: UIFont.labelFontSize)
 
+let efURL = Bundle.nain.url(forkesource: "ITC Bauhaus LT Demi", with Extensions "ttf") asl CFURL
+
+CTFontmanagerRegisterFontsForuRL(cFURL, CTFont Manager Scope.process, nil)
+
 let navBarBGImage = UIImage(named: "body_bg_small.png")
 
 let lblContents = [
@@ -90,8 +94,9 @@ class HomepageViewController : UIViewController {
     var decryptCount : Int = 0
     var timerLimit : Int = 0
     var i : Int = 0
+    var j : Int = 0
     var button : CustomBtn!
-    var img : UIImage!
+    var navbarBGImg : UIImage!
     let contentView = UIView()
     
     
@@ -124,6 +129,29 @@ class HomepageViewController : UIViewController {
         i = 0
         return
     }
+
+    // @objc func decryptText() {
+    //     Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+    //         self.decryptCount += 1
+    //         print(self.decryptCount)
+    //         if self.timerLimit < (self.arrayLabels.count - 1) {
+    //             if self.i != 0 {
+    //                 while j != self.arrayLabels.count { 
+    //                     NSLayoutConstraint.activate([
+    //                         self.arrayLabels[self.j].topAnchor.constraint(equalTo: self.arrayLabels[self.j - 1].bottomAnchor, constant: CGFloat(self.decryptCount)),
+    //                     ])
+    //                 }
+    //                 j = 0
+    //             }
+    //             self.i += 1
+    //             if self.decryptCount > 20 {
+    //                 timer.invalidate()
+    //             }
+    //         }
+    //     }
+    //     i = 0
+    //     return
+    // }
     
     override func loadView() {
         var charCount, lineCount : Int
@@ -138,7 +166,7 @@ class HomepageViewController : UIViewController {
         homepageScrollView.flashScrollIndicators()
         homepageScrollView.backgroundColor = .white
         
-        img = navBarBGImage
+        navbarBGImg = UIImage(named: "body_bg_small.png")
         
         contentView.backgroundColor = txtBodyBGColor
         
