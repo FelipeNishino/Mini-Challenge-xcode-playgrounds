@@ -12,11 +12,13 @@ let txtBodyBGColor : UIColor = .init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0
 
 let customFont = UIFont(name: "ITC Bauhaus LT Demi", size: UIFont.labelFontSize)
 
-let efURL = Bundle.nain.url(forkesource: "ITC Bauhaus LT Demi", with Extensions "ttf") asl CFURL
+let cfURL = Bundle.main.url(forResource: "ITCBauhausLTDemi", withExtension: "ttf") as! CFURL
 
-CTFontmanagerRegisterFontsForuRL(cFURL, CTFont Manager Scope.process, nil)
+CTFontManagerRegisterFontsForURL(cfURL, CTFontManagerScope.process, nil)
 
 let navBarBGImage = UIImage(named: "body_bg_small.png")
+let navbarTitleLbl : UILabel
+navbarTitleLbl = UILabel()
 
 let lblContents = [
     "Procedimentos de contenção especial:",
@@ -77,7 +79,7 @@ class ContentLabel : UILabel {
     }
     
     func lblStyle() {
-        font = customFont
+        font = UIFont(name: "ITCBauhausLTDemi", size: 20.0)
         adjustsFontForContentSizeCategory = true
         text = "Placeholder"
         textColor = txtBodyColor
@@ -85,7 +87,6 @@ class ContentLabel : UILabel {
         lineBreakMode = NSLineBreakMode.byWordWrapping
         textAlignment = .justified
     }
-    
 }
 
 class HomepageViewController : UIViewController {
@@ -99,67 +100,121 @@ class HomepageViewController : UIViewController {
     var navbarBGImg : UIImage!
     let contentView = UIView()
     
-    
     func getLblAnchors(lbl0: ContentLabel, lbl: ContentLabel, lblHeight: CGFloat, view: UIView) {
         NSLayoutConstraint.activate([
-//            lbl.topAnchor.constraint(equalTo: lbl0.bottomAnchor, constant: 20),
+            //            lbl.topAnchor.constraint(equalTo: lbl0.bottomAnchor, constant: 20),
             lbl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             lbl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 360),
             lbl.heightAnchor.constraint(equalToConstant: lblHeight)
         ])
     }
     
-    @objc func decryptText(sender: UIButton) {
-        print(view.frame.size.height)
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-            self.decryptCount += 1
-            print(self.decryptCount)
-            if self.timerLimit < (self.arrayLabels.count - 1) {
-                if self.i != 0 {
-                    NSLayoutConstraint.activate([
-                        self.arrayLabels[self.i].topAnchor.constraint(equalTo: self.arrayLabels[self.i - 1].bottomAnchor, constant: CGFloat(self.decryptCount)),
-                    ])
-                }
-                self.i += 1
-                if self.decryptCount == 19 {
-                    timer.invalidate()
+        @objc func decryptText(sender: UIButton) {
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+                
+                self.decryptCount += 1
+                if self.timerLimit < (self.arrayLabels.count - 1) {
+                    if self.decryptCount != 0 {
+                        NSLayoutConstraint.activate([
+                            self.arrayLabels[self.decryptCount].topAnchor.constraint(equalTo: self.arrayLabels[self.decryptCount - 1].bottomAnchor, constant: CGFloat(self.decryptCount)),
+                        ])
+                    }
+//                    self.i += 1
+                    if self.decryptCount >= self.arrayLabels.count - 1 {
+                        timer.invalidate()
+                    }
                 }
             }
+            i = 0
+            sender.isHidden = true
+            return
         }
-        i = 0
-        return
-    }
-
-    // @objc func decryptText() {
-    //     Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-    //         self.decryptCount += 1
-    //         print(self.decryptCount)
-    //         if self.timerLimit < (self.arrayLabels.count - 1) {
-    //             if self.i != 0 {
-    //                 while j != self.arrayLabels.count { 
-    //                     NSLayoutConstraint.activate([
-    //                         self.arrayLabels[self.j].topAnchor.constraint(equalTo: self.arrayLabels[self.j - 1].bottomAnchor, constant: CGFloat(self.decryptCount)),
-    //                     ])
-    //                 }
-    //                 j = 0
-    //             }
-    //             self.i += 1
-    //             if self.decryptCount > 20 {
-    //                 timer.invalidate()
-    //             }
-    //         }
-    //     }
-    //     i = 0
-    //     return
-    // }
+    
+//    func applyAnchors(iterator: Int) {
+//
+//        var anchorConstant : CGFloat
+//        //        print(decryptCount)
+//        anchorConstant = decryptCount * CGFloat(iterator)
+//        //                      print(anchorConstant)
+//        //                        print("crashou aqui")
+//        //            print(j)
+//
+//
+//        NSLayoutConstraint.activate([
+//            self.arrayLabels[iterator].topAnchor.constraint(equalTo: self.arrayLabels[iterator - 1].bottomAnchor, constant: anchorConstant),
+//        ])
+//
+//
+//        //        for j in 1...self.arrayLabels.count - 1 {
+//        //            anchorConstant = decryptCount * CGFloat(j)
+//        //            print(anchorConstant)
+//        //            //                        print("crashou aqui")
+//        ////            print(j)
+//        //            NSLayoutConstraint.activate([
+//        //                self.arrayLabels[j].topAnchor.constraint(equalTo: self.arrayLabels[0].bottomAnchor, constant: anchorConstant),
+//        //            ])
+//        //        }
+//
+//        if iterator < 17 {
+//            applyAnchors(iterator: iterator + 1)
+//        }
+//    }
+//
+//    @objc func decryptText(sender: UIButton) {
+//        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+////            self.decryptCount += 1
+//            //            print(self.decryptCount)
+//            //            print()
+//            //             if self.timerLimit < (self.arrayLabels.count - 1) {
+//            //                 if self.i != 0 {
+//
+//            //            if self.j < self.arrayLabels.count {
+//            self.applyAnchors(iterator: 1)
+//            //            }
+//
+//
+//
+//            //            for j in 1...self.arrayLabels.count - 1 {
+//            //                //                        print("crashou aqui")
+//            //                print(j)
+//            //                NSLayoutConstraint.activate([
+//            //                    self.arrayLabels[j].topAnchor.constraint(equalTo: self.arrayLabels[0].bottomAnchor, constant: self.decryptCount * CGFloat(j)),
+//            //                ])
+//            //            }
+//            //                }
+//
+//
+//            //                    while self.j != self.arrayLabels.count {
+//            //                         NSLayoutConstraint.activate([
+//            //                             self.arrayLabels[self.j].topAnchor.constraint(equalTo: self.arrayLabels[self.j - 1].bottomAnchor, constant: CGFloat(self.decryptCount)),
+//            //                         ])
+//            //                     }
+//            //                    self.j = 0
+//            //                 }
+//            self.i += 1
+//            if self.decryptCount > CGFloat(self.arrayLabels.count - 1) {
+//                timer.invalidate()
+//            }
+//            self.decryptCount = 20
+//        }
+//        sender.isHidden = true
+//    }
+//    //         i = 0
+//    //         return
+//    //     }
     
     override func loadView() {
         var charCount, lineCount : Int
         var lblHeight : CGFloat
         
-        contentView.frame.size.height = 2080
+        contentView.frame.size.height = 5000
+        
+        navbarTitleLbl.text = "SCP-Aoki"
+        navbarTitleLbl.textColor = .white
         
         let homepageScrollView = UIScrollView()
+        
+        self.navigationItem.titleView = navbarTitleLbl
         
         homepageScrollView.contentSize = contentView.frame.size
         homepageScrollView.addSubview(contentView)
@@ -203,7 +258,7 @@ class HomepageViewController : UIViewController {
         
         button = CustomBtn()
         
-        button.setTitle("Teste custom", for: .normal)
+        button.setTitle("Verificar Credencial", for: .normal)
         
         homepageScrollView.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -211,7 +266,7 @@ class HomepageViewController : UIViewController {
         button.addTarget(self, action: #selector(decryptText), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: arrayLabels[arrayLabels.endIndex - 1].bottomAnchor, constant: 20),
+            button.topAnchor.constraint(equalTo: arrayLabels[arrayLabels.endIndex - 1].bottomAnchor, constant: 50),
             button.widthAnchor.constraint(equalToConstant: 200),
             button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
         ])
@@ -223,7 +278,7 @@ class HomepageViewController : UIViewController {
 let rootViewController = HomepageViewController()
 let navigationController = UINavigationController(rootViewController: rootViewController)
 navigationController.navigationBar.setBackgroundImage(navBarBGImage, for: .top, barMetrics: .default)
-
+navigationController.navigationItem.titleView = navbarTitleLbl
 
 PlaygroundPage.current.liveView = navigationController;
 //https://makeapppie.com/2018/03/14/tip-creating-navigation-controllers/
