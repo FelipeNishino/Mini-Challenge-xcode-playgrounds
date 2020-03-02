@@ -2,6 +2,26 @@ import UIKit
 import Foundation
 import PlaygroundSupport
 
+// UIImage *theImage = [UIImage imageNamed:@"someImageName.png"];
+// UIImageView *imgView = [[UIImageView alloc] initWithImage:theImage];
+
+// self.imageView = imgView; // assuming you have a property called imageView
+
+// [imgView release];
+
+// [self.view addSubview:self.imageView]; //in your view controller
+// once you've done this, you can use:
+
+// [self.imageView setHidden:YES];
+
+
+
+// img.isHidden = false
+
+
+// le+
+
+
 let txtLinkColor : UIColor = .init(red: 0.6, green: 0, blue: 0.03, alpha: 1.0)
 let txtLinkBGColor : UIColor = .init(red: 0.8, green: 0.28, blue: 0.34, alpha: 1.0)
 let btnBorderColor : UIColor = .init(red: 0.38, green: 0, blue: 0.02, alpha: 1.0)
@@ -10,11 +30,15 @@ let txtBodyColor : UIColor = .init(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
 let txtTitleColor : UIColor = .init(red: 0.3, green: 0, blue: 0.035, alpha: 1.0)
 let txtBodyBGColor : UIColor = .init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
 
-let customFont = UIFont(name: "ITC Bauhaus LT Demi", size: UIFont.labelFontSize)
+let customFont = UIFont(name: "Bauhaus LT Demi", size: UIFont.labelFontSize)
 
-let cfURL = Bundle.main.url(forResource: "ITCBauhausLTDemi", withExtension: "ttf") as! CFURL
+let cfURL = Bundle.main.url(forResource: "Bauhaus LT Demi", withExtension: "ttf") as! CFURL
 
 CTFontManagerRegisterFontsForURL(cfURL, CTFontManagerScope.process, nil)
+
+let logo = UIImage(named: "logo.png")
+let mainImgH = UIImage(named: "aokiH.png")
+let mainImgS = UIImage(named: "aoki.jpg")
 
 let navBarBGImage = UIImage(named: "body_bg_small.png")
 let navbarTitleLbl : UILabel
@@ -79,7 +103,7 @@ class ContentLabel : UILabel {
     }
     
     func lblStyle() {
-        font = UIFont(name: "ITCBauhausLTDemi", size: 20.0)
+        font = UIFont(name: "Bauhaus LT Demi", size: 20.0)
         adjustsFontForContentSizeCategory = true
         text = "Placeholder"
         textColor = txtBodyColor
