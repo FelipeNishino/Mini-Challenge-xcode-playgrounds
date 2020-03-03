@@ -2,8 +2,6 @@ import UIKit
 import Foundation
 import PlaygroundSupport
 
-// 9 : 16
-
 let txtLinkColor : UIColor = .init(red: 0.6, green: 0, blue: 0.03, alpha: 1.0)
 let txtLinkBGColor : UIColor = .init(red: 0.8, green: 0.28, blue: 0.34, alpha: 1.0)
 let btnBorderColor : UIColor = .init(red: 0.38, green: 0, blue: 0.02, alpha: 1.0)
@@ -12,14 +10,11 @@ let txtBodyColor : UIColor = .init(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
 let txtTitleColor : UIColor = .init(red: 0.3, green: 0, blue: 0.035, alpha: 1.0)
 let txtBodyBGColor : UIColor = .init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
 
-let windowWidth = 375
-let windowHeight = 812
+let windowWidth = 375, windowHeight = 812
 
-let imgWidth = 300
+let imgWidth = 300, btnWidth = 200
+// 9 : 16
 
-let btnWidth = 200
-
-let logo = UIImage(named: "logo.png")
 let mainImgH = UIImage(named: "aokiH.jpg")
 let mainImgS = UIImage(named: "aoki.jpg")
 
@@ -45,8 +40,6 @@ let lblContents = [
     "█: Certo, de acordo então com os resultados de recentes observações você será transferido para um novo projeto, muito obrigado pela cooperação.",
     "Nota especial sobre a situação do SCP-Aoki: Devido aos altos índices de capacidade e potencial observados em um período de ███ dias, a partir de ██/██/████ SCP-Aoki deve ser retirado de seu estado de contenção e será inserido no programa Apple Developer Academy, visando prover uma elevação do sujeito nas diversas habilidades que tal projeto incentiva e treina."
 ]
-
-//40 caracteres por linha
 
 class CustomBtn : UIButton {
     override init(frame: CGRect) {
@@ -89,7 +82,6 @@ class ContentLabel : UILabel {
         numberOfLines = 0
         lineBreakMode = NSLineBreakMode.byWordWrapping
         textAlignment = .justified
-        backgroundColor = .init(red: 0.5, green: 0, blue: 0, alpha: 0.2)
     }
 }
 
@@ -101,64 +93,46 @@ class HomepageViewController : UIViewController {
     var imgBtn = UIButton()
     let contentView = UIView()
     
-    func getLblAnchors(lbl0: ContentLabel, lbl: ContentLabel, lblHeight: CGFloat) {
-        NSLayoutConstraint.activate([
-            lbl.topAnchor.constraint(equalTo: arrayLabels[0].topAnchor, constant: 0),
-//            .bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: 300),
-            lbl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            lbl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 360),
-//            lbl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            lbl.heightAnchor.constraint(equalToConstant: lblHeight),
-        ])
-    }
+    var constraints : [NSLayoutConstraint] = []
+    var originConstraints : [NSLayoutConstraint] = []
+    var constraints2 : [NSLayoutConstraint] = []
     
-    
-        @objc func decryptText(sender: UIButton) {
-            imgBtn.isHighlighted = true
-            sender.isHidden = true
-            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-                self.decryptCount += 1
-                
-                NSLayoutConstraint.activate([
-                    self.arrayLabels[self.decryptCount].topAnchor.constraint(equalTo: self.arrayLabels[self.decryptCount - 1].bottomAnchor, constant: 20)
-                ])
-
-                if self.decryptCount >= self.arrayLabels.count - 1 {
-                    timer.invalidate()
-                }
+    @objc func decryptText(sender: UIButton) {
+        imgBtn.isHighlighted = true
+        sender.isHidden = true
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+            self.constraints[self.decryptCount].isActive = false
+            self.constraints2[self.decryptCount].isActive = true
+            self.decryptCount += 1
+            
+            if self.decryptCount >= self.arrayLabels.count - 1{
+                timer.invalidate()
             }
-
-            return
         }
-
-
+    }
     
     override func loadView() {
         var charCount, lineCount : Int
         var lblHeight : CGFloat
-        
-        contentView.frame.size.height = 3000
+        let homepageScrollView = UIScrollView()
+         
+        contentView.frame.size.height = 3300
         
         navbarTitleLbl.text = "SCP-Aoki"
         navbarTitleLbl.textColor = .white
-        
-        let homepageScrollView = UIScrollView()
-        
         self.navigationItem.titleView = navbarTitleLbl
         
         homepageScrollView.contentSize = contentView.frame.size
         homepageScrollView.addSubview(contentView)
         homepageScrollView.flashScrollIndicators()
-        homepageScrollView.backgroundColor = .white
-        
         homepageScrollView.backgroundColor = txtBodyBGColor
         
         button = CustomBtn()
+        button.setTitle("Verificar Credencial", for: .normal)
+        button.addTarget(self, action: #selector(decryptText), for: .touchUpInside)
         
         imgBtn.setImage(mainImgH, for: .normal)
         imgBtn.setImage(mainImgS, for: .highlighted)
-        
-        button.setTitle("Verificar Credencial", for: .normal)
         
         homepageScrollView.addSubview(button)
         contentView.addSubview(imgBtn)
@@ -166,59 +140,47 @@ class HomepageViewController : UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         imgBtn.translatesAutoresizingMaskIntoConstraints = false
         
-        button.addTarget(self, action: #selector(decryptText), for: .touchUpInside)
-        
         NSLayoutConstraint.activate([
             imgBtn.widthAnchor.constraint(equalToConstant: CGFloat(imgWidth)),
             imgBtn.heightAnchor.constraint(equalToConstant: CGFloat(((imgWidth * 16) / 9))),
             imgBtn.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             imgBtn.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(((windowWidth - imgWidth) / 2))),
             
-            button.topAnchor.constraint(equalTo: imgBtn.bottomAnchor, constant: 20),
+            button.topAnchor.constraint(equalTo: imgBtn.topAnchor, constant: CGFloat((((imgWidth * 16) / 9))) / 2),
             button.widthAnchor.constraint(equalToConstant: 200),
             button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat((windowWidth - btnWidth) / 2))
         ])
         
-        for i in 0...(lblContents.count - 1) {
-            
+        for i in 0...lblContents.count - 1 {
             arrayLabels.append(ContentLabel())
-            
             arrayLabels[i].text = lblContents[i]
             
+            contentView.addSubview(arrayLabels[i])
+            arrayLabels[i].translatesAutoresizingMaskIntoConstraints = false
             charCount = lblContents[i].count
             lineCount = ((charCount / 40) + 3) * Int(arrayLabels[i].font.lineHeight)
             lblHeight = CGFloat(lineCount)
             
-            contentView.addSubview(arrayLabels[i])
-    
             if i == 0 {
-                NSLayoutConstraint.activate([
-                    arrayLabels[i].topAnchor.constraint(equalTo: button.bottomAnchor, constant: 50),
-                    arrayLabels[i].bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: 300),
-                    arrayLabels[i].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-                    arrayLabels[i].trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 360),
-                    arrayLabels[i].heightAnchor.constraint(equalToConstant: lblHeight)
-                ])
-            }
-            else {
-                getLblAnchors(lbl0: arrayLabels[i-1], lbl: arrayLabels[i], lblHeight: lblHeight)
-                
-                
-//                NSLayoutConstraint.activate([
-//                    arrayLabels[i].topAnchor.constraint(equalTo: arrayLabels[i - 1].bottomAnchor, constant: 50),
-//                    arrayLabels[i].bottomAnchor.constraint(equalTo: arrayLabels[i].topAnchor, constant: 300),
-//                    arrayLabels[i].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-//                    arrayLabels[i].trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 360),
-//                    arrayLabels[i].heightAnchor.constraint(equalToConstant: lblHeight)
-//                ])
+                originConstraints.append(arrayLabels[i].topAnchor.constraint(equalTo: imgBtn.bottomAnchor, constant: 20))
+                originConstraints.append(arrayLabels[i].bottomAnchor.constraint(equalTo: imgBtn.bottomAnchor, constant: 300))
             }
             
-            arrayLabels[i].translatesAutoresizingMaskIntoConstraints = false
+            originConstraints.append(arrayLabels[i].heightAnchor.constraint(equalToConstant: lblHeight))
+            originConstraints.append(arrayLabels[i].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20))
+            originConstraints.append(arrayLabels[i].trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 360))
+            
+            if i > 0 {
+                constraints.append(arrayLabels[i].topAnchor.constraint(equalTo: arrayLabels[i - 1].topAnchor, constant: 0))
+                constraints2.append(arrayLabels[i].topAnchor.constraint(equalTo: arrayLabels[i - 1].bottomAnchor, constant: 20))
+            }
         }
+        NSLayoutConstraint.activate(originConstraints)
+        NSLayoutConstraint.activate(constraints)
+        
         self.view = homepageScrollView
     }
 }
-
 
 let rootViewController = HomepageViewController()
 let navigationController = UINavigationController(rootViewController: rootViewController)
